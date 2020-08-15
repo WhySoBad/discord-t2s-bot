@@ -61,9 +61,9 @@ const fb: any = {
     },
   },
   help: {
-    EN: `This are all existing commands:\n%c`,
-    DE: `Dies sind alle verfügbaren Befehle:\n%c`,
-    FR: `Ce sont toutes les commandes disponibles:\n%c`,
+    EN: `A detailed list with all existing commands can be found here: https://github.com/WhySoBad/discord-t2s-bot/tree/master#Commands`,
+    DE: `Eine detaillierte Liste mit allen verfügbaren Befehlen kann hier gefunden werden: https://github.com/WhySoBad/discord-t2s-bot/tree/master#Commands`,
+    FR: `Une liste détaillée de toutes les commandes disponibles peut être trouvée ici: https://github.com/WhySoBad/discord-t2s-bot/tree/master#Commands`,
   },
   novc: {
     EN: `You have to be in a voice channel to use text-to-speech`,
@@ -140,7 +140,7 @@ export const configCommand = (
         return fb[cmd].err[l];
       }
     default:
-      return fb['help'][l].replace('%c', `- ${cmds.join('\n- ')}`);
+      return fb['help'][l];
   }
 };
 

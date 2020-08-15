@@ -31,7 +31,7 @@ client.on('message', (message: Message) => {
   c = message.channel;
   g = message.guild;
   vC = message.member.voice.channel;
-  const gConfig = new GroupConfig(g.id, { lang: 'FR', useLangNick: true });
+  const gConfig = new GroupConfig(g.id, { useLangNick: true });
   gConfig.updateLangNick();
   const { configChannel, t2sChannel }: any = gConfig.get();
   g.channels.cache.forEach((channel) => {

@@ -28,10 +28,15 @@ export class GroupConfig {
     this.writeJson();
   }
   private readJson(): Object {
+    if (!fs.existsSync(configPath)) this.createConfigFile();
     return JSON.parse(fs.readFileSync(configPath).toString());
   }
   private writeJson(): void {
+    if (!fs.existsSync(configPath)) this.createConfigFile();
     fs.writeFileSync(configPath, JSON.stringify(this._configFile, null, 2));
+  }
+  private createConfigFile(): void {
+    fs.writeFileSync(configPath, '{}');
   }
   updateLangNick(): void {
     const s = this.getUseLangNick();

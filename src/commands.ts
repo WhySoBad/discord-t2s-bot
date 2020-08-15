@@ -82,17 +82,6 @@ export const configCommand = (
   message: string,
   config: GroupConfig,
 ): string => {
-  const cmds: string[] = [
-    'lang',
-    'setlang',
-    'configChannel',
-    'setConfigChannel',
-    'T2SChannel',
-    'setT2SChannel',
-    'useLangNick',
-    'setUseLangNick',
-    'help',
-  ];
   const l: string = config.getLang();
   const cC: string = config.getConfigChannel();
   const t2sC: string = config.getT2SChannel();

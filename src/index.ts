@@ -10,28 +10,37 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { GroupConfig } from './config';
 import { configCommand, t2sCommand } from './commands';
-import T2S from './t2s';
+import { T2S } from './t2s';
 dotenv.config();
 const token: string = process.env.BOT_TOKEN;
-export const client: any = new Client();
+export const client: Client = new Client();
 export const configPath: string = `${path.dirname(
   __dirname,
 )}\\groupConfig.json`;
 
 client.on('ready', () => {
-  client.user.setActivity({ type: 'WATCHING', name: 'chat' });
+  client.user.setPresence({
+    status: 'online',
+    activity: {
+      type: 'PLAYING',
+      name: 'text to speech',
+    },
+  });
 });
 
 let g: Guild;
 let c: any;
 let vC: VoiceChannel;
+let gConfig: GroupConfig;
+let gT2S: T2S;
 
 client.on('message', (message: Message) => {
   if (message.author.bot) return;
   c = message.channel;
   g = message.guild;
   vC = message.member.voice.channel;
-  const gConfig = new GroupConfig(g.id, { useLangNick: true });
+  gConfig = gConfig ? gConfig : new GroupConfig(g.id, { useLangNick: true });
+  gT2S = gT2S ? gT2S : new T2S(gConfig);
   gConfig.updateLangNick();
   const { configChannel, t2sChannel }: any = gConfig.get();
   g.channels.cache.forEach((channel) => {
@@ -58,13 +67,12 @@ client.on('message', (message: Message) => {
         ) {
           return;
         } else {
-          T2S(`${message.content}`, vC, gConfig);
+          gT2S.add(message.content, vC);
         }
       }
     }
   });
 });
-
 export const setNick = (
   guild: string | Guild,
   nick: string,

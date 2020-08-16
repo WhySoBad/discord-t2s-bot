@@ -6,6 +6,13 @@ interface ConfigTemplate {
   useLangNick?: boolean;
   configChannel?: string;
   t2sChannel?: string;
+  idle?: number;
+  speed?: number;
+}
+
+export enum SpeakingSpeed {
+  FAST = 1,
+  SLOW = 0.24,
 }
 
 const template: ConfigTemplate = {
@@ -13,6 +20,8 @@ const template: ConfigTemplate = {
   useLangNick: false,
   configChannel: 't2s-config',
   t2sChannel: 'text-to-speech',
+  idle: 12,
+  speed: 1,
 };
 
 export class GroupConfig {
@@ -66,6 +75,14 @@ export class GroupConfig {
     this._config.t2sChannel = name;
     this.writeJson();
   }
+  setIdleTimeout(timeout: number): void {
+    this._config.idle = timeout;
+    this.writeJson();
+  }
+  setT2SSpeed(speed: SpeakingSpeed): void {
+    this._config.speed = speed;
+    this.writeJson();
+  }
   getLang(): string {
     return this._config.lang;
   }
@@ -77,6 +94,12 @@ export class GroupConfig {
   }
   getT2SChannel(): string {
     return this._config.t2sChannel;
+  }
+  getIdleTimeout(): number {
+    return this._config.idle;
+  }
+  getT2SSpeed(): number {
+    return this._config.speed;
   }
   get(): Object {
     return this._config;

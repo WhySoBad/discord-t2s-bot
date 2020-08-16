@@ -1,4 +1,4 @@
-import { GroupConfig } from './config';
+import { GroupConfig, SpeakingSpeed } from './config';
 
 const fb: any = {
   lang: {
@@ -60,6 +60,45 @@ const fb: any = {
       FR: `useLangNick a été changé en \`%s\``,
     },
   },
+  idletimeout: {
+    EN: `The current idleTimeout is \`%t\`s`,
+    DE: `Das derzeitige idleTimeout ist \`%t\`s`,
+    FR: `L'actuel idleTimeout est \`%t\`s`,
+  },
+  setidletimeout: {
+    err: {
+      EN: `This isn't a valid number \`<setIdleTimeout [seconds]>\``,
+      DE: `Dies ist keine gültige Zahl \`<setIdleTimeout [seconds]>\``,
+      FR: `Ce n'est pas un numéro valide \`<setIdleTimeout [seconds]>\``,
+    },
+    suc: {
+      EN: `The idleTimeout is now \`%t\`s`,
+      DE: `Das idleTimeout beträgt nun \`%t\`s`,
+      FR: `Le idleTimeout est maintenant \`%t\`s`,
+    },
+  },
+  speed: {
+    EN: `The current speaking speed is \`%s\``,
+    DE: `Die derzeitige Sprechgeschwindigkeit beträgt \`%s\``,
+    FR: `Le taux de parole actuel est \`%s\``,
+  },
+  setspeed: {
+    alr: {
+      EN: `The speaking speed is already \`%s\``,
+      DE: `Die Sprechgeschwindigkeit ist bereits \`%s\``,
+      FR: `Le taux de parole est déjà \`%s\``,
+    },
+    suc: {
+      EN: `The speaking speed was set to \`%s\``,
+      DE: `Die Sprechgeschwindigkeit wurde zu \`%s\` geändert`,
+      FR: `La vitesse de parole a été réglée sur \`%s\``,
+    },
+    err: {
+      EN: `This isn't a valid speaking speed`,
+      DE: `Dies ist keine gültige Sprechgeschwindigkeit`,
+      FR: `Ce n'est pas un taux de parole valide`,
+    },
+  },
   help: {
     EN: `A detailed list with all existing commands can be found here: https://github.com/WhySoBad/discord-t2s-bot/tree/master#Commands`,
     DE: `Eine detaillierte Liste mit allen verfügbaren Befehlen kann hier gefunden werden: https://github.com/WhySoBad/discord-t2s-bot/tree/master#Commands`,
@@ -87,6 +126,8 @@ export const configCommand = (
   const t2sC: string = config.getT2SChannel();
   const uLN: boolean = config.getUseLangNick();
   const cmd: string = command.toLowerCase();
+  const iTO: number = config.getIdleTimeout();
+  const s: number = config.getT2SSpeed();
   switch (command.toLowerCase()) {
     case 'lang':
       return fb[cmd][l];
@@ -128,6 +169,38 @@ export const configCommand = (
       } else {
         return fb[cmd].err[l];
       }
+    case 'idletimeout':
+      return fb[cmd][l].replace('%t', iTO);
+    case 'setidletimeout':
+      let newTimeout = parseFloat(message.split(' ')[0]);
+      if (!isNaN(newTimeout)) {
+        config.setIdleTimeout(newTimeout);
+        return fb[cmd].suc[l].replace('%t', newTimeout);
+      } else {
+        return fb[cmd].err[l];
+      }
+    case 'speed':
+      return fb[cmd][l].replace('%s', s == 1 ? 'fast' : 'slow');
+    case 'setspeed':
+      let newSpeed = message.split(' ')[0].toLowerCase();
+      if (newSpeed == 'fast') {
+        if (s === SpeakingSpeed.FAST) {
+          return fb[cmd].alr[l].replace('%s', newSpeed);
+        } else {
+          config.setT2SSpeed(SpeakingSpeed.FAST);
+          return fb[cmd].suc[l].replace('%s', newSpeed);
+        }
+      } else if (newSpeed == 'slow') {
+        if (s === SpeakingSpeed.SLOW) {
+          return fb[cmd].alr[l].replace('%s', newSpeed);
+        } else {
+          config.setT2SSpeed(SpeakingSpeed.SLOW);
+          return fb[cmd].suc[l].replace('%s', newSpeed);
+        }
+      } else {
+        return fb[cmd].err[l];
+      }
+
     default:
       return fb['help'][l];
   }

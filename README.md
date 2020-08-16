@@ -43,6 +43,22 @@ The `useLangNick` command returns whether the bot shows the current [languageCod
 
 The `setUseLangNick [name]` command changes whether the bot shows the current [languageCode](#languageCodes) in the nickname or not.
 
+### idleTimeout
+
+The `idleTimeout` command returns the current idle time until the bot leaves a VoiceChannel. The default is 12 seconds
+
+### setIdleTimeout
+
+The `setIdleTimeout [seconds]` command changes the idle time until the bot leaves a VoiceChannel.
+
+### speed
+
+The `speed` command returns the current speaking speed. Default is fast.
+
+### setSpeed
+
+The `setSpeed [fast/slow]` command sets the speaking speed to fast or slow.
+
 ### help
 
 The `help` command redirects you to this list.
